@@ -182,6 +182,15 @@ td.n{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:now
 .chg .lbl{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .chg .to p{color:var(--ink)}
 @media (max-width:900px){.chg{grid-template-columns:minmax(0,1fr);gap:12px}}
+.sell-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-block:1px solid var(--line)}
+.sell-stats div{padding:18px 16px;display:grid;gap:2px}
+.sell-stats div+div{border-left:1px solid var(--line)}
+.sell-stats b{font-family:var(--f-display);font-weight:800;font-stretch:80%;font-size:clamp(30px,3.6vw,44px);line-height:1;font-variant-numeric:tabular-nums}
+.sell-stats span{font-size:13px;color:var(--muted)}
+@media (max-width:640px){.sell-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.sell-stats div:nth-child(3){border-left:0}.sell-stats div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+.sim-frame{display:block;width:100%;height:760px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.sim-link{margin:10px 0 0;font-family:var(--f-mono);font-size:12px}
+.sim-link a{color:var(--muted)}
 footer{margin-top:96px;border-top:2px solid var(--ink);padding-block:28px 40px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
 footer .mark{color:var(--ink)}
 
@@ -375,17 +384,12 @@ footer .mark{color:var(--ink)}
   </section>
 
   <section id="sell">
-    <div class="sec-head">
+    <div class="sec-head" style="margin-bottom:18px">
       <h2>Could it sell?</h2>
-      <p>If this shoe were released for production, would it make money? I modeled it at Nike scale: traditional molds, a Vietnam factory, a $160 retail price and a 2024 to 2027 timeline. Cost and market numbers come from public sources, and the simulator lets you change how well it sells and what it costs.</p>
+      <p>The shoe modeled at Nike scale: a Vietnam factory, a $160 retail price, 2024 to 2027. Change how well it sells or the price and watch the numbers move.</p>
     </div>
-    <div class="stats">
-      <div class="stat"><span class="v">371K<small>pairs</small></span><span class="k">Peak-year sales in the realistic case, about half of what Kobe's line sold in 2014</span></div>
-      <div class="stat"><span class="v">$61.61</span><span class="k">Landed cost per pair in the US, including a 30% import tariff</span></div>
-      <div class="stat"><span class="v">$7.9M</span><span class="k">Pre-tax profit from 2024 to 2027 after $6.9M of development and tooling</span></div>
-      <div class="stat"><span class="v">2026</span><span class="k">Year the investment is earned back</span></div>
-    </div>
-    <p style="margin:26px 0 0"><a class="btn" style="display:inline-block;text-decoration:none;color:var(--ink);border-color:var(--ink);padding:12px 16px" href="business-sim.html">Open the business simulator &rarr;</a></p>
+    <iframe id="simFrame" class="sim-frame" src="business-sim.html?embed=1" title="Business simulator"></iframe>
+    <p class="sim-link"><a href="business-sim.html" target="_blank" rel="noopener">Open full simulator with sources &rarr;</a></p>
   </section>
 
   <section id="build">
@@ -892,5 +896,6 @@ const FEATURES = [
 })();
 </script>
 
+<script>window.addEventListener('message',function(e){var f=document.getElementById('simFrame');if(f&&e.source===f.contentWindow&&e.data&&e.data.simHeight){f.style.height=Math.min(Math.max(e.data.simHeight+4,400),2400)+'px';}});</script>
 </body>
 </html>

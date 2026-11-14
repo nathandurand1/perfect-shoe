@@ -96,6 +96,16 @@ svg .mut{fill:var(--muted)}
 .back:hover{color:var(--ink)}
 details summary{font-family:var(--display);font-stretch:80%;font-weight:800;text-transform:uppercase}
 </style>
+<style>
+html.embed .back,html.embed h1,html.embed .lede,html.embed .notes,html.embed .sources{display:none!important}
+html.embed body{background:transparent}
+html.embed .wrap{padding-top:0!important;padding-bottom:0!important;max-width:none!important}
+</style>
+<script>
+(function(){if(window.self!==window.top||/[?&]embed/.test(location.search)){document.documentElement.classList.add('embed');
+function send(){try{parent.postMessage({simHeight:document.documentElement.scrollHeight},'*')}catch(e){}}
+window.addEventListener('load',send);new ResizeObserver(send).observe(document.documentElement);document.addEventListener('click',function(){setTimeout(send,60)});}})();
+</script>
 </head>
 <body>
 <div class="wrap">

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Could The Perfect Shoe realistically sell? A business simulation of cost, price and profit if the shoe were released for production.">
+<title>Could It Sell? | The Perfect Shoe | Nathan Durand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout idea: left rail of controls, right side of results; summary tiles first, detail below. */
+:root{
+  --bg:#f2eee8; --panel:#fbf9f5; --ink:#16141b; --muted:#5c5766; --line:#dcd4c9;
+  --accent:#6024ac; --accent-ink:#ffffff; --gain:#1f7a4d; --loss:#c0392b;
+  --seg1:#16141b; --seg2:#6024ac; --seg3:#9a6cf0; --seg4:#cdbdf0; --seg5:#e8871e; --seg6:#f2b872;
+  --display:'Archivo','Arial Narrow',Arial,sans-serif; --body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e0d12; --panel:#17151d; --ink:#ece9f2; --muted:#a19cad; --line:#2b2834;
+    --accent:#9a6cf0; --accent-ink:#0e0d12; --gain:#4cc38a; --loss:#ff7b6b;
+    --seg1:#ece9f2; --seg2:#9a6cf0; --seg3:#6b45b0; --seg4:#3d2f63; --seg5:#e8871e; --seg6:#f2b872;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e0d12; --panel:#17151d; --ink:#ece9f2; --muted:#a19cad; --line:#2b2834;
+  --accent:#9a6cf0; --accent-ink:#0e0d12; --gain:#4cc38a; --loss:#ff7b6b;
+  --seg1:#ece9f2; --seg2:#9a6cf0; --seg3:#6b45b0; --seg4:#3d2f63; --seg5:#e8871e; --seg6:#f2b872;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 48px}
+h1{font-family:var(--display);font-weight:850;font-stretch:75%;text-transform:uppercase;font-size:clamp(40px,6vw,72px);line-height:.95;margin:0 0 12px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:800;font-stretch:80%;text-transform:uppercase;font-size:24px;margin:0 0 10px;text-wrap:balance}
+p{margin:0}
+.lede{color:var(--muted);max-width:70ch}
+.timeline{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 22px}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:5px 12px;font-size:13px;display:flex;gap:8px;align-items:center}
+.chip b{font-family:var(--display);font-stretch:80%;font-size:18px;font-weight:800}
+.chip.now{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 22%,transparent)}
+.chip.proj{border-style:dashed;color:var(--muted)}
+.grid{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+.controls{position:sticky;top:12px}
+@media (max-width:900px){.controls{position:static}}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.ctl{margin:0 0 16px}
+.ctl label,.ctl .lab{display:flex;justify-content:space-between;gap:8px;font-weight:500;margin-bottom:4px}
+.ctl output{font-weight:600;color:var(--accent)}
+.hint{color:var(--muted);font-size:12.5px;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.checks{display:grid;gap:8px;margin:0 0 16px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.check input{margin-top:3px;accent-color:var(--accent);width:16px;height:16px}
+button{font:inherit;font-weight:600;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:8px 14px;cursor:pointer}
+button.opt{background:transparent;color:var(--ink);border:1px solid var(--line);padding:7px 4px;font-weight:500;font-size:14px}
+button.opt[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+button.ghost{background:transparent;color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.verdict{font-size:17px;margin:0 0 16px;max-width:68ch}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.tile{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--panel)}
+.tile .k{font-size:12.5px;color:var(--muted)}
+.tile .v{font-family:var(--display);font-stretch:80%;font-size:34px;line-height:1.1;font-weight:800}
+.tile .s{font-size:12px;color:var(--muted)}
+.tile.good .v{color:var(--gain)} .tile.bad .v{color:var(--loss)}
+.section{margin-bottom:18px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-family:var(--display);font-stretch:85%;font-size:16px;font-weight:700}
+th small{display:block;font-family:var(--body);font-size:11.5px;font-weight:400;color:var(--muted)}
+tr.tot td{font-weight:600}
+.neg{color:var(--loss)} .pos{color:var(--gain)}
+svg{width:100%;height:auto;display:block}
+svg text{fill:var(--ink);font-family:var(--body);font-size:12px}
+svg .mut{fill:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+.stack{display:flex;height:34px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.stack span{display:block;height:100%}
+.notes{font-size:13.5px;color:var(--muted)}
+.notes ul{margin:8px 0 0;padding-left:18px}
+.notes a{color:var(--accent)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.stack span{transition:width .25s}}
+.back{display:inline-block;margin:0 0 18px;color:var(--muted);text-decoration:none;font:500 12px/1 'IBM Plex Mono',ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase}
+.back:hover{color:var(--ink)}
+details summary{font-family:var(--display);font-stretch:80%;font-weight:800;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./">&larr; The Perfect Shoe</a>
+  <h1>The Perfect Shoe: business simulator</h1>
+  <p class="lede">Could this shoe realistically sell? This simulation shows how the shoe would actually perform in the market if it were released for production.</p>
+  <div class="timeline" aria-label="Timeline">
+    <div class="chip"><b>2024</b> Development and tooling</div>
+    <div class="chip"><b>2025</b> Launch</div>
+    <div class="chip now"><b>2026</b> Peak year, today</div>
+    <div class="chip proj"><b>2027</b> Projected decline</div>
+  </div>
+
+  <div class="grid">
+    <aside class="panel controls" aria-label="Controls">
+      <h2>Try it</h2>
+      <div class="ctl"><div class="lab">How well does it sell?</div>
+        <div class="seg" role="group" aria-label="Sales scenario">
+          <button type="button" class="opt" data-sc="slow" aria-pressed="false">Slow seller</button>
+          <button type="button" class="opt" data-sc="real" aria-pressed="true">Realistic</button>
+          <button type="button" class="opt" data-sc="hit" aria-pressed="false">Hit</button>
+        </div>
+        <div class="hint" id="h_sc"></div></div>
+      <div class="ctl"><label for="price">Retail price <output id="o_price"></output></label>
+        <input id="price" type="range" min="110" max="220" step="5" value="160">
+        <div class="hint" id="h_price">The average high-top basketball shoe sells for about $160.</div></div>
+      <button class="ghost" id="reset" type="button">Reset</button>
+    </aside>
+
+    <main>
+      <p class="verdict" id="verdict" aria-live="polite"></p>
+      <div class="tiles" id="tiles"></div>
+
+      <section class="panel section">
+        <h2>Profit by year</h2>
+        <div id="chart1"></div>
+        <p class="hint">Cumulative pre-tax profit (EBIT). The bar crosses above zero in the payback year.</p>
+      </section>
+
+      <section class="panel section">
+        <h2>Where each pair's money goes</h2>
+        <div class="stack" id="stack" role="img" aria-label="Breakdown of net revenue per pair"></div>
+        <div class="legend" id="legend"></div>
+        <p class="hint" id="stacknote"></p>
+      </section>
+
+      <details class="panel section"><summary style="cursor:pointer;font-size:22px">See it year by year</summary>
+        <div class="tablewrap" style="margin-top:10px"><table id="tbl"></table></div>
+      </details>
+
+      <section class="panel section notes">
+        <h2>How the volume was chosen</h2>
+        <p id="mktnote"></p>
+        <p style="margin-top:8px"><b>How price changes sales.</b> Sales are scaled by (price / $160)<sup>-2</sup>, a price elasticity of -2. Published studies of brand-level price response average -1.76 (Tellis, 367 estimates) and -2.62 (Bijmolt et al., 1,851 estimates); I used -2 because a big brand like Nike is a bit less price-sensitive than the average brand. A price cut can add at most 50% more pairs, because factories, stores and the market can only absorb so much. The -2 is an estimate, not a measured number for this shoe.</p>
+        <p style="margin-top:8px">The Excel model that matches this page has every input, the sources and a sensitivity grid. Zoom unit, carbon plate and Filon costs have no public price, so they are my estimates; the sourced numbers are market size, Nike's share, channel mix, tooling costs and the tariff rate. Figures are pre-tax and leave out inventory financing, royalties and athlete contracts.</p>
+        <ul>
+          <li><a href="https://www.msi.org/working-papers/the-price-elasticity-of-selective-demand-a-metaanalysis-of-sales-response-models/">Tellis (1988)</a> and <a href="https://synapsesocial.com/papers/W2153205326">Bijmolt, van Heerde and Pieters (2005)</a>: average brand price elasticity of -1.76 and -2.62</li>
+          <li><a href="https://techsciresearch.com/report/basketball-shoes-market/20208.html">TechSci Research</a>: global basketball shoe market, $3.07B in 2025</li>
+          <li><a href="https://youthsportsbusinessreport.com/basketball-training-equipment-market-reaches-1-01b-in-2026-youth-participation-fuels-growth/">Youth Sports Business Report</a>: Nike holds about 27% share</li>
+          <li><a href="https://runrepeat.com/basketball-shoe-statistics">RunRepeat</a>: average basketball shoe prices</li>
+          <li><a href="https://secure.businesswire.com/news/home/20260630156660/en/NIKE-Inc.-Reports-Fiscal-2026-Fourth-Quarter-and-Full-Year-Results">Nike FY2026 results</a>: gross margin, marketing and overhead ratios</li>
+          <li><a href="https://fourweekmba.com/nike-revenue-by-sales-channel/">FourWeekMBA</a>: 61% wholesale / 39% NIKE Direct</li>
+          <li><a href="https://shoemakersacademy.com/?p=30616">Shoemakers Academy</a>: outsole and midsole tooling costs</li>
+          <li><a href="https://www.calcmytariff.com/country/vietnam/footwear">CalcMyTariff</a>: Vietnam footwear tariff</li>
+          <li><a href="https://hypebeast.com/2015/3/lebron-james-tops-list-of-signature-shoe-sales-in-2014">Hypebeast</a>: 2014 signature shoe sales used as a cross-check</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</div>
+<script>
+const BASE = {
+  price:160, lineShare:0.06, duty:0.30, ws:0.61, mkt:0.07, tCarbon:1, tZoom:1, tFilon:1
+};
+const K = { elast:-2.0, refPrice:160, volCap:1.5,
+  mktSize:3070000000, avgPrice:134, nikeShare:0.27,
+  wsPct:0.50, wsAllow:0.06, dirDisc:0.12,
+  clearPct:0.08, clearPrice:0.40, oh:0.12,
+  curve:[0,0.70,1.00,0.55],
+  cUpper:7.0, cFilon:3.0, cPad:1.5, cOutsole:4.0, cMidsole:3.5, cStrobel:1.5, cZoom:4.0, cCarbon:4.5, cTrim:1.5, cPack:1.8,
+  labor:4.5, overhead:3.0, fprofit:0.10, freight:1.2, dc:3.0, eol:0.5,
+  fixed:{team:12*150000*1.5, samples:3000*100, testing:400000, tooling:3*(14*(2000+4500)+5000+60000), launch:3000000}
+};
+const SC={slow:{peak:200000,t:'About 200,000 pairs at the peak, like a minor model in Nike\'s line.'},
+  real:{peak:371000,t:'About 371,000 pairs at the peak, from the market math below.'},
+  hit:{peak:750000,t:'About 750,000 pairs at the peak, as many as Kobe\'s line sold in 2014.'}};
+let scenario='real';
+const YEARS=[2024,2025,2026,2027];
+const LABELS=['Development','Launch','Peak, today','Projected'];
+
+function compute(p){
+  const mat = K.cUpper + K.cFilon*p.tFilon + K.cPad + K.cOutsole + K.cMidsole + K.cStrobel + K.cZoom*p.tZoom + K.cCarbon*p.tCarbon + K.cTrim + K.cPack;
+  const profit = (mat+K.labor+K.overhead)*K.fprofit;
+  const fob = mat+K.labor+K.overhead+profit;
+  const dutyAmt = fob*p.duty;
+  const logi = K.dc+K.eol;
+  const landed = fob+K.freight+dutyAmt+logi;
+  const wsNet = p.price*K.wsPct*(1-K.wsAllow);
+  const dirNet = p.price*(1-K.dirDisc);
+  const blended = p.ws*wsNet+(1-p.ws)*dirNet;
+  const worldPairs = K.mktSize/K.avgPrice;
+  const nikePairs = worldPairs*K.nikeShare;
+  const basePeak = p.peak!=null ? p.peak : Math.round(nikePairs*p.lineShare/1000)*1000;
+  const volMult = Math.min(K.volCap, Math.pow(p.price/K.refPrice, K.elast));
+  const peak = Math.round(basePeak*volMult/1000)*1000;
+  const fixedTotal = Object.values(K.fixed).reduce((a,b)=>a+b,0);
+  const yrs=[]; let cum=0;
+  for(let i=0;i<4;i++){
+    if(i===0){ cum=-fixedTotal; yrs.push({demand:0,clear:0,prod:0,rev:0,gp:0,ebit:-fixedTotal,cum}); continue; }
+    const demand=peak*K.curve[i], clear=demand*K.clearPct, prod=demand+clear;
+    const rev=demand*p.ws*wsNet+demand*(1-p.ws)*dirNet+clear*blended*K.clearPrice;
+    const gp=rev-prod*landed;
+    const op=gp-rev*p.mkt-rev*K.oh;
+    cum+=op; yrs.push({demand,clear,prod,rev,gp,ebit:op,cum});
+  }
+  const totalRev=yrs.reduce((a,y)=>a+y.rev,0), totalGp=yrs.reduce((a,y)=>a+y.gp,0);
+  const totalEbit=yrs[3].cum;
+  const totalDemand=yrs.reduce((a,y)=>a+y.demand,0);
+  const contrib=blended*(1+K.clearPct*K.clearPrice)*(1-p.mkt-K.oh)-landed*(1+K.clearPct);
+  const be=contrib>0?fixedTotal/contrib:Infinity;
+  let payback='Not by 2027';
+  if(yrs[1].cum>=0)payback='2025'; else if(yrs[2].cum>=0)payback='2026'; else if(yrs[3].cum>=0)payback='2027';
+  return {volMult,basePeak,mat,profit,fob,dutyAmt,logi,landed,wsNet,dirNet,blended,peak,nikePairs,worldPairs,fixedTotal,yrs,totalRev,totalGp,totalEbit,totalDemand,contrib,be,payback};
+}
+
+/* ---------- formatting ---------- */
+const usd0=v=>'$'+Math.round(Math.abs(v)).toLocaleString('en-US');
+const usd2=v=>'$'+Math.abs(v).toFixed(2);
+const sgn=(v,s)=> (v<0?'-':'')+s;
+const money=v=>{const a=Math.abs(v); const s=a>=1e6?'$'+(a/1e6).toFixed(1)+'M':a>=1e3?'$'+Math.round(a/1e3)+'K':'$'+Math.round(a); return (v<0?'-':'')+s;};
+const num=v=>Math.round(v).toLocaleString('en-US');
+
+/* ---------- state ---------- */
+const $=id=>document.getElementById(id);
+function read(){
+  return {price:+$('price').value, peak:SC[scenario].peak, duty:BASE.duty, ws:BASE.ws, mkt:BASE.mkt, lineShare:BASE.lineShare,
+    tCarbon:1, tZoom:1, tFilon:1};
+}
+function featureHints(p){
+  const f=(c)=>c*(1+K.fprofit)*(1+p.duty);
+  $('h_carbon').textContent='Adds about '+usd2(f(K.cCarbon))+' landed per pair (estimate)';
+  $('h_zoom').textContent='Adds about '+usd2(f(K.cZoom))+' landed per pair (estimate)';
+  $('h_filon').textContent='Adds about '+usd2(f(K.cFilon))+' landed per pair (estimate)';
+}
+function chart1(r){
+  const W=640,H=250,L=56,R=16,T=22,B=44;
+  const vals=r.yrs.map(y=>y.cum);
+  const maxV=Math.max(0,...vals), minV=Math.min(0,...vals);
+  const span=(maxV-minV)||1; const pad=span*0.12;
+  const hi=maxV+pad, lo=minV-(minV<0?pad:0);
+  const y=v=>T+(hi-v)/(hi-lo)*(H-T-B);
+  const bw=(W-L-R)/4;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cumulative profit by year">`;
+  const raw=(hi-lo)/4, mag=Math.pow(10,Math.floor(Math.log10(raw))), nf=raw/mag;
+  const step=(nf<=1?1:nf<=2?2:nf<=5?5:10)*mag;
+  for(let v=Math.ceil(lo/step)*step; v<=hi+1e-6; v+=step){
+    const yy=y(v);
+    s+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="var(--line)" stroke-width="1"/>`;
+    s+=`<text class="mut" x="${L-8}" y="${yy+4}" text-anchor="end">${money(Math.abs(v)<1e-6?0:v)}</text>`;
+  }
+  s+=`<line x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--ink)" stroke-width="1.2"/>`;
+  r.yrs.forEach((yr,i)=>{
+    const x=L+i*bw+bw*0.2, w=bw*0.6, v=yr.cum;
+    const y0=y(0), y1=y(v);
+    const top=Math.min(y0,y1), h=Math.max(Math.abs(y1-y0),1);
+    s+=`<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="3" fill="${v>=0?'var(--gain)':'var(--loss)'}" ${i===3?'opacity=".6"':''}/>`;
+    const ly=v>=0?top-6:top+h+14;
+    s+=`<text x="${x+w/2}" y="${ly}" text-anchor="middle" font-weight="600">${money(v)}</text>`;
+    s+=`<text x="${x+w/2}" y="${H-24}" text-anchor="middle" font-weight="600">${YEARS[i]}</text>`;
+    s+=`<text class="mut" x="${x+w/2}" y="${H-8}" text-anchor="middle">${LABELS[i]}</text>`;
+  });
+  s+='</svg>';
+  $('chart1').innerHTML=s;
+}
+function stack(r,p){
+  const sellPct=p.mkt+K.oh;
+  const sell=r.blended*sellPct;
+  const left=r.blended-r.landed-sell;
+  const mat=r.mat, lab=K.labor, ohp=K.overhead+r.profit, frt=K.freight, dty=r.dutyAmt, lg=r.logi;
+  const segs=[
+    ['Materials',mat,'var(--seg1)'],['Factory labor',lab,'var(--seg2)'],['Factory overhead + profit',ohp,'var(--seg3)'],
+    ['Freight',frt,'var(--seg4)'],['Import duty + tariff',dty,'var(--seg6)'],['Warehouse + end-of-life',lg,'var(--seg4)'],
+    ['Marketing + selling',sell,'var(--seg5)']
+  ];
+  if(left>0) segs.push(['Left per pair before one-time costs',left,'var(--gain)']);
+  const total=segs.reduce((a,b)=>a+b[1],0);
+  $('stack').innerHTML=segs.map(s=>`<span title="${s[0]}: ${usd2(s[1])}" style="width:${s[1]/total*100}%;background:${s[2]}"></span>`).join('');
+  $('legend').innerHTML=segs.map(s=>`<span><i style="background:${s[2]}"></i>${s[0]} ${usd2(s[1])}</span>`).join('');
+  $('stacknote').textContent = left>=0
+    ? `Each regular pair brings in ${usd2(r.blended)} after wholesale and discounts, and about ${usd2(left)} is left before the one-time costs and clearance effects.`
+    : `Each regular pair brings in ${usd2(r.blended)} but costs more than that to land, market and sell: it loses about ${usd2(-left)} per pair before one-time costs.`;
+}
+function table(r){
+  const rows=[
+    ['Pairs sold (regular demand)',r.yrs.map(y=>y.demand),num,r.totalDemand],
+    ['Net revenue',r.yrs.map(y=>y.rev),money,r.totalRev],
+    ['Gross profit',r.yrs.map(y=>y.gp),money,r.totalGp],
+    ['EBIT (pre-tax profit)',r.yrs.map(y=>y.ebit),money,r.totalEbit],
+    ['Cumulative EBIT',r.yrs.map(y=>y.cum),money,r.totalEbit]
+  ];
+  let h='<thead><tr><th></th>'+YEARS.map((y,i)=>`<th>${y}<small>${LABELS[i]}</small></th>`).join('')+'<th>Total<small>2024-2027</small></th></tr></thead><tbody>';
+  rows.forEach((row,i)=>{
+    const [n,vals,f,tot]=row;
+    const cls=(v)=> (i>=3 && v<0)?' class="neg"':'';
+    h+=`<tr${i===3?' class="tot"':''}><td>${n}</td>`+vals.map((v,j)=>`<td${cls(v)}>${(v===0&&i<3)?'-':f(v)}</td>`).join('')+`<td${cls(tot)}>${i===4?'':f(tot)}</td></tr>`;
+  });
+  $('tbl').innerHTML=h+'</tbody>';
+}
+function render(){
+  const p=read(); const r=compute(p);
+  $('o_price').textContent='$'+p.price;
+  { const ch=Math.round((r.volMult-1)*100); $('h_price').textContent = ch===0 ? 'The average high-top basketball shoe sells for about $160, the price the sales numbers assume.' : (ch>0 ? `A lower price brings more buyers: about ${ch}% more pairs than at $160.` : `A higher price loses buyers: about ${-ch}% fewer pairs than at $160.`) + ' The pairs shown already include this.'; } $('h_sc').textContent=SC[scenario].t;
+  document.querySelectorAll('button.opt').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sc===scenario));
+  const win=r.totalEbit>=0;
+  $('verdict').textContent = win
+    ? `At ${'$'+p.price} and ${num(r.peak)} pairs in the peak year, this shoe earns about ${money(r.totalEbit)} before tax from 2024 to 2027 and earns back its ${money(r.fixedTotal)} development and tooling spend in ${r.payback}.`
+    : `At ${'$'+p.price} and ${num(r.peak)} pairs in the peak year, this shoe loses about ${money(-r.totalEbit)} before tax from 2024 to 2027. It needs about ${isFinite(r.be)?num(r.be):'more than any'} pairs to earn back its ${money(r.fixedTotal)} up-front spend.`;
+  const em=r.totalRev?r.totalEbit/r.totalRev:0;
+  const tiles=[
+    ['Profit, 2024-2027',money(r.totalEbit),'Pre-tax, after all costs',win?'good':'bad'],
+    ['Pays back in',r.payback,'Break-even: '+(isFinite(r.be)?num(r.be):'never')+' pairs',''],
+    ['Cost to land one pair',usd2(r.landed),'Factory price '+usd2(r.fob),''],
+    ['Profit margin',(em*100).toFixed(1)+'%','Nike FY25: 8.2%',em>=0?'':'bad']
+  ];
+  $('tiles').innerHTML=tiles.map(t=>`<div class="tile ${t[3]}"><div class="k">${t[0]}</div><div class="v">${t[1]}</div><div class="s">${t[2]}</div></div>`).join('');
+  chart1(r); stack(r,p); table(r);
+  $('mktnote').textContent=`The world sells about ${(r.worldPairs/1e6).toFixed(1)} million basketball pairs a year ($3.07B market at an average $134). Nike's roughly 27% share is about ${(r.nikePairs/1e6).toFixed(1)} million pairs. The realistic case assumes it wins 6% of those, which is 371,000 pairs, about half of what Kobe's line sold in 2014 (about 750,000 pairs), the last year with public numbers. The slow and hit cases are the low and high ends of that range.`;
+}
+$('price').addEventListener('input',render);
+document.querySelectorAll('button.opt').forEach(b=>b.addEventListener('click',()=>{scenario=b.dataset.sc;render();}));
+$('reset').addEventListener('click',()=>{
+  $('price').value=160; scenario='real'; render();
+});
+render();
+</script>
+</body>
+</html>

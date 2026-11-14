@@ -159,7 +159,7 @@ window.addEventListener('load',send);new ResizeObserver(send).observe(document.d
       <section class="panel section notes">
         <h2>How the volume was chosen</h2>
         <p id="mktnote"></p>
-        <p style="margin-top:8px"><b>How price changes sales.</b> Sales are scaled by (price / $160)<sup>-2</sup>, a price elasticity of -2. Published studies of brand-level price response average -1.76 (Tellis, 367 estimates) and -2.62 (Bijmolt et al., 1,851 estimates); I used -2 because a big brand like Nike is a bit less price-sensitive than the average brand. A price cut can add at most 50% more pairs, because factories, stores and the market can only absorb so much. The -2 is an estimate, not a measured number for this shoe.</p>
+        <p style="margin-top:8px"><b>How price changes sales.</b> Raising the price doesn't automatically make more money, because fewer people buy. Below $160, sales are scaled by (price / $160)<sup>-2</sup>, a price elasticity of -2. Published studies of brand-level price response average -1.76 (Tellis, 367 estimates) and -2.62 (Bijmolt et al., 1,851 estimates); I used -2 because a big brand like Nike is a bit less price-sensitive than the average brand. Above $160, buyers drop off faster: the elasticity grows from -2 toward about -3.9 at $220, because few players pay over $200 for a basketball shoe. So profit rises a little up to about $180, then falls. A price cut can add at most 50% more pairs, because factories, stores and the market can only absorb so much. These elasticities are estimates, not measured numbers for this shoe.</p>
         <p style="margin-top:8px">The Excel model that matches this page has every input, the sources and a sensitivity grid. Zoom unit, carbon plate and Filon costs have no public price, so they are my estimates; the sourced numbers are market size, Nike's share, channel mix, tooling costs and the tariff rate. Figures are pre-tax and leave out inventory financing, royalties and athlete contracts.</p>
         <ul>
           <li><a href="https://www.msi.org/working-papers/the-price-elasticity-of-selective-demand-a-metaanalysis-of-sales-response-models/">Tellis (1988)</a> and <a href="https://synapsesocial.com/papers/W2153205326">Bijmolt, van Heerde and Pieters (2005)</a>: average brand price elasticity of -1.76 and -2.62</li>
@@ -180,7 +180,7 @@ window.addEventListener('load',send);new ResizeObserver(send).observe(document.d
 const BASE = {
   price:160, lineShare:0.06, duty:0.30, ws:0.61, mkt:0.07, tCarbon:1, tZoom:1, tFilon:1
 };
-const K = { elast:-2.0, refPrice:160, volCap:1.5,
+const K = { elast:-2.0, elastRise:5, refPrice:160, volCap:1.5,
   mktSize:3070000000, avgPrice:134, nikeShare:0.27,
   wsPct:0.50, wsAllow:0.06, dirDisc:0.12,
   clearPct:0.08, clearPrice:0.40, oh:0.12,
@@ -209,7 +209,8 @@ function compute(p){
   const worldPairs = K.mktSize/K.avgPrice;
   const nikePairs = worldPairs*K.nikeShare;
   const basePeak = p.peak!=null ? p.peak : Math.round(nikePairs*p.lineShare/1000)*1000;
-  const volMult = Math.min(K.volCap, Math.pow(p.price/K.refPrice, K.elast));
+  const elastAt = p.price<=K.refPrice ? K.elast : K.elast - K.elastRise*(p.price-K.refPrice)/K.refPrice;
+  const volMult = Math.min(K.volCap, Math.pow(p.price/K.refPrice, elastAt));
   const peak = Math.round(basePeak*volMult/1000)*1000;
   const fixedTotal = Object.values(K.fixed).reduce((a,b)=>a+b,0);
   const yrs=[]; let cum=0;
@@ -322,7 +323,7 @@ function render(){
   const win=r.totalEbit>=0;
   $('verdict').textContent = win
     ? `At ${'$'+p.price} and ${num(r.peak)} pairs in the peak year, this shoe earns about ${money(r.totalEbit)} before tax from 2024 to 2027 and earns back its ${money(r.fixedTotal)} development and tooling spend in ${r.payback}.`
-    : `At ${'$'+p.price} and ${num(r.peak)} pairs in the peak year, this shoe loses about ${money(-r.totalEbit)} before tax from 2024 to 2027. It needs about ${isFinite(r.be)?num(r.be):'more than any'} pairs to earn back its ${money(r.fixedTotal)} up-front spend.`;
+    : `At ${'$'+p.price} and ${num(r.peak)} pairs in the peak year, this shoe loses about ${money(-r.totalEbit)} before tax from 2024 to 2027. ${isFinite(r.be)?`It would need about ${num(r.be)} pairs to earn back its ${money(r.fixedTotal)} up-front spend.`:`At this price each pair doesn't make enough to ever earn back the ${money(r.fixedTotal)} up-front spend.`}`;
   const em=r.totalRev?r.totalEbit/r.totalRev:0;
   const tiles=[
     ['Profit, 2024-2027',money(r.totalEbit),'Pre-tax, after all costs',win?'good':'bad'],

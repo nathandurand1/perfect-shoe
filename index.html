@@ -172,6 +172,16 @@ td.n{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:now
 .tests td:first-child{font-weight:600;white-space:nowrap}
 @media (max-width:900px){.areas{grid-template-columns:repeat(2,minmax(0,1fr))}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow div{border-bottom:1px solid var(--line)}.about{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:560px){.areas,.about .facts{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:minmax(0,1fr)}}
+.now{display:grid;gap:0;border-top:2px solid var(--ink)}
+.chg{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,4fr) minmax(0,5fr);gap:28px;padding:24px 0;border-bottom:1px solid var(--line)}
+.chg .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--purple-ink)}
+.chg h3{font-size:26px;font-weight:800;font-stretch:85%;text-transform:uppercase;line-height:1;margin-top:8px}
+.chg .ref{font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-top:10px}
+.chg .ref b{color:var(--ink);font-weight:500}
+.chg p{margin:0;color:var(--muted);font-size:15px}
+.chg .lbl{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.chg .to p{color:var(--ink)}
+@media (max-width:900px){.chg{grid-template-columns:minmax(0,1fr);gap:12px}}
 footer{margin-top:96px;border-top:2px solid var(--ink);padding-block:28px 40px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
 footer .mark{color:var(--ink)}
 
@@ -206,6 +216,7 @@ footer .mark{color:var(--ink)}
       <li><a href="#prototype">Printed</a></li>
       <li><a href="#data">Data</a></li>
       <li><a href="#references">References</a></li>
+      <li><a href="#today">Today</a></li>
       <li><a href="#build">Build</a></li>
     </ul>
   </nav>
@@ -324,6 +335,36 @@ footer .mark{color:var(--ink)}
           <tr><td class="shoe">Melo 0.1</td><td>Thick padding, high cushioned ankle</td><td><span class="verdict took">Adopted</span></td><td>High-top collar</td></tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+
+  <section id="today">
+    <div class="sec-head">
+      <h2>If I started today</h2>
+      <p>I started this project four years ago. Since then, footwear technology has moved fast. Here is what I would change now, and the Nike product that showed me why.</p>
+    </div>
+    <div class="now">
+      <div class="chg">
+        <div><span class="k">01 · Cushioning</span><h3>A ZoomX core</h3><div class="ref">Inspired by <b>G.T. Cut 3</b> · 2024</div></div>
+        <div><span class="lbl">Then</span><p>The base is a thin layer of React foam, with most of the cushioning coming from the full-length Zoom strobel and carbon plate. A thick layer of foam on top of a strobel would have made the shoe too heavy.</p></div>
+        <div class="to"><span class="lbl">Now</span><p>The G.T. Cut 3 brought ZoomX foam to a basketball shoe for the first time. ZoomX is lighter and more responsive, so I could pair it with my full-length Zoom strobel for more energy return without the weight I was worried about.</p></div>
+      </div>
+      <div class="chg">
+        <div><span class="k">02 · Materials</span><h3>React to ReactX</h3><div class="ref">Inspired by <b>ReactX</b> · 2023</div></div>
+        <div><span class="lbl">Then</span><p>The base of the shoe is Nike React foam. I chose it for performance only. Sustainability wasn't part of my requirements.</p></div>
+        <div class="to"><span class="lbl">Now</span><p>ReactX is injection molded instead of compression molded, cutting the midsole's carbon footprint by at least 43% while adding 13% more energy return than React. Swapping React for ReactX is a direct upgrade: better performance and a lower carbon footprint, and sustainability becomes a requirement from day one.</p></div>
+      </div>
+      <div class="chg">
+        <div><span class="k">03 · Design process</span><h3>Athlete-driven AI</h3><div class="ref">Inspired by <b>Nike A.I.R.</b> · 2024</div></div>
+        <div><span class="lbl">Then</span><p>I designed one shoe from surveys and the shoes I had played in.</p></div>
+        <div class="to"><span class="lbl">Now</span><p>For A.I.R., Nike used generative AI and 3D printing to prototype shoes with 13 athletes. I've started down that path: I used AI to turn my Fusion model into this interactive render. Next, I would use it to explore variations of the design for different players before printing.</p></div>
+      </div>
+      <div class="chg">
+        <div><span class="k">04 · Cost</span><h3>Built to mass produce</h3><div class="ref">Inspired by <b>G.T. Cut Academy</b></div></div>
+        <div><span class="lbl">Then</span><p>I put every technology I liked into one shoe: a full-length Zoom strobel, a carbon fiber plate, React foam, a TPU net and a rubber heel counter.</p></div>
+        <div class="to"><span class="lbl">Now</span><p>Packing all of that into one shoe is unrealistic to mass produce at a price that still makes a profit. Nike solves this with tiers: the G.T. Cut Academy keeps the G.T. Cut look and traction but swaps in Renew foam and a small forefoot Zoom unit to land under $100. I would do the same: keep the Zoom strobel and traction that define the shoe, and cut or shrink the parts that cost the most, starting with a shorter plate and a TPU net only where the upper takes load.</p></div>
+      </div>
     </div>
   </section>
 

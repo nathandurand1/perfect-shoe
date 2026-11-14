@@ -224,7 +224,6 @@ footer .mark{color:var(--ink)}
       <li><a href="#creation">Behind the design</a></li>
       <li><a href="#prototype">Printed</a></li>
       <li><a href="#data">Data</a></li>
-      <li><a href="#references">References</a></li>
       <li><a href="#today">Today</a></li>
       <li><a href="#sell">Could it sell?</a></li>
       <li><a href="#build">Build</a></li>
@@ -327,29 +326,7 @@ footer .mark{color:var(--ink)}
     </div>
   </section>
 
-  <section id="references">
-    <div class="sec-head">
-      <h2>References</h2>
-      <p>I took the best feature of each shoe I've worn or studied, and left out the ones that worked against ankle support and protection.</p>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Reference</th><th>What I studied</th><th>Decision</th><th>Where it went</th></tr></thead>
-        <tbody>
-          <tr><td class="shoe">Dame 6</td><td>Herringbone traction that stays grippy with little dust</td><td><span class="verdict took">Adopted</span></td><td>Outsole pattern</td></tr>
-          <tr><td class="shoe">Kobe 6 · GT Cut</td><td>Drop-in midsole for court feel</td><td><span class="verdict skip">Rejected</span></td><td>Midsole is attached instead</td></tr>
-          <tr><td class="shoe">Zoom Air vs Air Max</td><td>Cushioning units: size, reactivity, profile</td><td><span class="verdict took">Zoom</span></td><td>Full-length strobel with pods</td></tr>
-          <tr><td class="shoe">Li-Ning · VKTRY</td><td>Carbon fiber plates for energy return</td><td><span class="verdict took">Adopted</span></td><td>Plate under the midsole</td></tr>
-          <tr><td class="shoe">PG 6</td><td>Rubber wrapping up the heel; full-length foam</td><td><span class="verdict took">Heel only</span></td><td>Raised cupsole heel</td></tr>
-          <tr><td class="shoe">GT Cut 2</td><td>TPU net over the upper</td><td><span class="verdict took">Adopted</span></td><td>Purple overlay band</td></tr>
-          <tr><td class="shoe">Melo 0.1</td><td>Thick padding, high cushioned ankle</td><td><span class="verdict took">Adopted</span></td><td>High-top collar</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-
-  <section id="today">
+    <section id="today">
     <div class="sec-head">
       <h2>If I started today</h2>
       <p>I started this project four years ago. Since then, footwear technology has moved fast. Here is what I would change now, mostly inspired by Nike products, along with ideas from other brands.</p>
@@ -463,22 +440,27 @@ const MESH_B64 = "0n+0ltq9hH8nlvm+0n+0lmPKgX8ilj7LK3+tlfe/IX+ilf/LxX5JldPAtX49lZ
 /* ---------- the story behind each part (from Nathan's research paper) ---------- */
 const FEATURES = [
  {id:'traction',lens:["Product testing", "Deeper, tighter herringbone grips harder but holds more dust. I'd want to try it on a dusty court to find the right spacing."],title:'Herringbone traction',part:'outsole',from:['Dame 6'],view:'bottom',
+  took:"Adopted from the Dame 6: herringbone traction that stays grippy with little dust. It became the outsole pattern.",
   body:["The best traction I've ever had was on the Dame 6, because of its herringbone pattern. It picks up very little dust, and when it does, a quick wipe brings the grip right back.",
         "The bite is strong. Wearing them feels like sticking to the court, so I built the outsole around the same idea."],
   shape:"Five W-shaped chevrons run from heel to toe, with purple rubber at the bottom of each groove."},
  {id:'heel',lens:["Materials", "More foam means more protection but more weight. Wrapping rubber up the heel protects landings without adding a full layer of foam."],title:'Raised heel rubber',part:'outsole',from:['PG 6'],view:'back',
+  took:"Heel only from the PG 6: the rubber that wraps up the heel. I left out its full-length foam. It became the raised cupsole heel.",
   body:["Like the PG 6, the rubber comes up the back of the heel. The extra rubber protects the heel of your foot when it strikes the ground.",
         "The PG 6 gets its cushioning from full-length React foam. I couldn't fit that much foam on top of a strobel board without making the shoe unnecessarily heavy, so the protection comes from the cupsole wall instead."],
   shape:"A rubber heel counter rises out of the cupsole and climbs highest at the center of the heel, trimmed with a purple edge, so the heel is wrapped in rubber where it strikes the ground."},
  {id:'plate',lens:["Materials", "More bounce, but a stiffer and heavier shoe. The plate's thickness decides how much of each you get."],title:'Carbon fiber plate',part:'plate',from:['Li-Ning','VKTRY'],view:'exploded',explode:true,
+  took:"Adopted from Li-Ning and VKTRY: carbon fiber plates for energy return. It became the plate under the midsole.",
   body:["Li-Ning shoes, including Dwyane Wade's line, are known for being extremely bouncy, and a carbon fiber board is a big reason why. VKTRY makes insoles built on the same idea.",
         "At first I worried a plate would make a shoe that already has a strobel too stiff and too heavy. Once I looked into it, I added it: the carbon acts like a spring, returning the energy you push into the ground and helping you leave the floor faster. It also absorbs shock, which protects your foot on landings."],
   shape:"Unlike Li-Ning and VKTRY, my plate isn't part of a drop-in. It sits under the attached midsole and above the rubber."},
  {id:'midsole',lens:["Product engineering", "I gave up some court feel for stability, because staying on my ankles matters more to me."],title:'Attached midsole',part:'midsole',from:['Kobe 6','GT Cut'],skip:true,view:'exploded',explode:true,
+  took:"Rejected from the Kobe 6 and GT Cut: the drop-in midsole for court feel. The midsole is attached instead.",
   body:["Two of the most popular basketball shoes, the GT Cut and the Kobe 6, both use a drop-in midsole. It gives better court feel.",
         "But a drop-in isn't connected to the base of the shoe, so it can shift. That means more ankle instability and a higher chance of injury, which is the exact opposite of what I'm aiming for. My midsole is attached."],
   shape:"The midsole is one full-length piece fixed into the cupsole, not a loose insert."},
  {id:'zoom',lens:["Product development", "Air Max cushions more for heavier players, but Zoom keeps the shoe low and quick, and stitching it in lets it run full length."],title:'Full-length Zoom strobel',part:'zoom',from:['Zoom Air','Air Max'],view:'strobel',explode:true,
+  took:"Zoom Air chosen over Air Max after comparing the cushioning units by size, reactivity and profile. It became the full-length strobel with pods.",
   body:["I compared Zoom Air and Air Max units. Zoom has the same upsides as Air Max, but it's smaller, easier to place anywhere in the shoe, and more reactive. Air Max is better for heavier players and foot pain; Zoom gives more bounce with a much lower profile, so the shoe isn't bulky.",
         "Newer shoes use a strobel board to connect the Zoom units to the midsole, which also lets them run full length. Mine runs heel to toe and is stitched to the rest of the shoe."],
   shape:"One clear Zoom Air unit runs the full length of the shoe, heel to toe, and acts as the strobel board: it is zig-zag stitched around its edge directly to the upper. Inside it, the pods sit where the foot loads: a heel triangle, three rectangles that shrink toward the toe, and a toe triangle."},
@@ -487,10 +469,12 @@ const FEATURES = [
         "It's lightweight and breathable, but strong enough to hold up to all the wear and tear of playing in it."],
   shape:"The grey sides of the upper are the Filon base layer."},
  {id:'tpu',lens:["Materials", "A solid overlay would be stronger, but a net gets most of the strength for almost no weight."],title:'TPU mesh overlay',part:'tpu',from:['GT Cut 2'],view:'topfront',
+  took:"Adopted from the GT Cut 2: a TPU net over the upper. It became the purple overlay band.",
   body:["On top of the Filon, I added a TPU mesh like the one on the GT Cut 2. It adds another layer of protection and strength.",
         "Because it's basically a net laid over the shoe, it adds almost no weight. TPU mesh is stronger and lighter than a solid overlay."],
   shape:"The purple band is the TPU net. Its sawtooth edge runs from the toe up the front of the shoe to the collar."},
  {id:'collar',lens:["Athlete needs", "A higher, padded collar trades a little mobility for comfort and ankle protection."],title:'Padded high-top collar',part:'collar',from:['Melo 0.1'],view:'collar',
+  took:"Adopted from the Melo 0.1: the thick padding and high cushioned ankle. It became the high-top collar.",
   body:["The most comfortable shoe I've ever worn is the Melo 0.1. It has thick padding throughout, especially at the ankle. The high, cushioned ankle support was comfortable and also protected my ankle from injury.",
         "Comfort and injury prevention go together, so the collar sits at ankle height with a sock-like fit."],
   shape:"The collar sits at ankle height, trimmed with a purple rim."},
@@ -833,6 +817,7 @@ const FEATURES = [
       <h2><span class="n">${String(i+1).padStart(2,'0')}</span>${f.title}</h2>
       <div class="chips">${f.from.map(s=>`<span class="chip">${f.skip?'Rejected: ':'From: '}<b>${s}</b></span>`).join('')}</div>
       ${f.body.map(p=>`<p>${p}</p>`).join('')}
+      ${f.took?`<div class="shape"><span class="k">From the references</span><p>${f.took}</p></div>`:''}
       <div class="shape"><span class="k">Why it looks like this</span><p>${f.shape}</p></div>
       <div class="lens"><span class="k">The trade-off · <b>${f.lens[0]}</b></span><p>${f.lens[1]}</p></div>`;
     body.scrollTop=0;pnav.hidden=false;partName.textContent=f.title;

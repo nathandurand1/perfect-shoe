@@ -14,3 +14,4 @@ Two agents edit this site at the same time. To keep each other's work:
 - **Next test** is its own section (`id="tests"`) with a full-size title and a nav link.
 - "From the references" note in the part panels (`took:` field in `FEATURES`).
 - Embedded business simulator in "Could it sell?" (`business-sim.html`).
+- **Applied physics** section (`id="physics"`, before "Could it sell?") with a nav link: embedded physics simulator (`physics-sim.html`), same iframe pattern as the business simulator. Added Nov 17, 2026.

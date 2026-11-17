@@ -224,6 +224,7 @@ footer .mark{color:var(--ink)}
       <li><a href="#creation">Behind the design</a></li>
       <li><a href="#prototype">Printed</a></li>
       <li><a href="#data">Data</a></li>
+      <li><a href="#physics">Applied physics</a></li>
       <li><a href="#sell">Could it sell?</a></li>
       <li><a href="#tests">Next test</a></li>
       <li><a href="#today">Today</a></li>
@@ -327,6 +328,15 @@ footer .mark{color:var(--ink)}
   </section>
 
   
+
+  <section id="physics">
+    <div class="sec-head" style="margin-bottom:18px">
+      <h2>Applied physics</h2>
+      <p>What happens inside the shoe when a player lands and cuts. Move the weight slider and watch the forces, the energy return and the ankle protection change.</p>
+    </div>
+    <iframe id="physFrame" class="sim-frame" src="physics-sim.html?embed=1&v=1" title="Applied physics simulator" scrolling="no"></iframe>
+    <p class="sim-link"><a href="physics-sim.html?v=1" target="_blank" rel="noopener">Open full page &rarr;</a></p>
+  </section>
 
   <section id="sell">
     <div class="sec-head" style="margin-bottom:18px">
@@ -855,6 +865,12 @@ const FEATURES = [
 </script>
 
 <script>(function(){var f=document.getElementById('simFrame');if(!f)return;
+function measure(){try{var d=f.contentDocument;if(!d)return;var w=d.querySelector('.wrap')||d.body;var h=Math.ceil(w.getBoundingClientRect().height);
+var cs=d.defaultView.getComputedStyle(d.body);h+=parseFloat(cs.marginTop)+parseFloat(cs.marginBottom)+parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
+if(h>100)f.style.height=Math.min(Math.max(h+8,300),2600)+'px';}catch(e){}}
+f.addEventListener('load',function(){measure();try{new ResizeObserver(measure).observe(f.contentDocument.querySelector('.wrap')||f.contentDocument.body);f.contentDocument.addEventListener('click',function(){setTimeout(measure,80)});f.contentDocument.addEventListener('toggle',function(){setTimeout(measure,80)},true);}catch(e){}});
+measure();setInterval(measure,1500);})();</script>
+<script>(function(){var f=document.getElementById('physFrame');if(!f)return;
 function measure(){try{var d=f.contentDocument;if(!d)return;var w=d.querySelector('.wrap')||d.body;var h=Math.ceil(w.getBoundingClientRect().height);
 var cs=d.defaultView.getComputedStyle(d.body);h+=parseFloat(cs.marginTop)+parseFloat(cs.marginBottom)+parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
 if(h>100)f.style.height=Math.min(Math.max(h+8,300),2600)+'px';}catch(e){}}

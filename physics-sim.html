@@ -3,75 +3,89 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Perfect Shoe: Applied Physics Simulator</title>
+<title>Applied physics | The Perfect Shoe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
 <style>
-:root{--bg:#0c0a16;--panel:#15121f;--panel2:#1f1b2e;--ink:#f1eefb;--muted:#a49fbf;--line:#2b2540;
---purple:#9b5cff;--teal:#2dd4bf;--orange:#ff8a3d;--pink:#ff5c93;--blue:#6cb4ff;
---display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;--body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;color-scheme:dark}
+/* Same tokens as the main site so the section reads as part of the page */
+:root{
+  --bg:#f2eee8;--surface:#fbf9f5;--ink:#16141b;--muted:#5c5766;--line:#dcd4c9;
+  --purple:#6024ac;--zoom:#e8871e;
+  --p1:#6024ac;--p2:#e8871e;--p3:#16141b;--p4:#a98bd6;--p5:#b9b0a4;--track:#e7e1d8;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e0d12;--surface:#17151d;--ink:#ece9f2;--muted:#a19cad;--line:#2b2834;--purple:#9a6cf0;
+  --p1:#9a6cf0;--p2:#e8871e;--p3:#ece9f2;--p4:#6b45b0;--p5:#6c6777;--track:#24212c;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e0d12;--surface:#17151d;--ink:#ece9f2;--muted:#a19cad;--line:#2b2834;--purple:#9a6cf0;
+  --p1:#9a6cf0;--p2:#e8871e;--p3:#ece9f2;--p4:#6b45b0;--p5:#6c6777;--track:#24212c;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;font-variant-numeric:tabular-nums;
-background-image:radial-gradient(900px 380px at 85% -100px,rgba(155,92,255,.22),transparent 70%)}
-.wrap{max-width:900px;margin:0 auto;padding:22px 16px 40px}
-.eyebrow{font-family:var(--display);letter-spacing:.24em;font-size:15px;color:var(--purple);font-weight:700}
-h1{font-family:var(--display);font-size:44px;line-height:1;margin:2px 0 6px;text-wrap:balance}
-h2{font-family:var(--display);font-size:26px;line-height:1.05;margin:0 0 4px;text-wrap:balance}
-.lede{color:var(--muted);margin:0 0 16px;font-size:16px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
-.mass{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.mass label{font-weight:600;font-size:17px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;font-variant-numeric:tabular-nums}
+.wrap{max-width:1280px;margin:0 auto;padding:28px 20px 40px}
+h1,h2{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:.95;text-transform:uppercase}
+h1{font-weight:850;font-stretch:75%;font-size:clamp(40px,6vw,72px);margin:6px 0 12px}
+h2{font-weight:800;font-stretch:80%;font-size:clamp(26px,3vw,34px);margin-bottom:6px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lede{color:var(--muted);max-width:62ch;margin:0 0 22px}
+.sub{color:var(--muted);margin:0 0 14px;font-size:15px;max-width:62ch}
+:focus-visible{outline:2px solid var(--zoom);outline-offset:3px}
+.block{border-top:1px solid var(--line);padding:26px 0}
+.mass{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-top:0;border-top:0}
+.mass label{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .mass input{flex:1;min-width:200px;accent-color:var(--purple);height:28px}
-.mass output{font-family:var(--display);font-size:34px;font-weight:700;color:var(--purple);min-width:92px;text-align:right}
-:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
-.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-@media (max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
-.tile{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:12px;padding:12px 14px}
-.tile .k{font-size:12px;letter-spacing:.1em;color:var(--muted);font-weight:600}
-.tile .v{font-family:var(--display);font-size:42px;line-height:1.05;font-weight:700;color:var(--c)}
-.tile .v small{font-size:17px;color:var(--muted);margin-left:4px}
+.mass output{font-family:var(--f-display);font-weight:800;font-stretch:80%;font-size:40px;line-height:1;min-width:104px;text-align:right}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-block:1px solid var(--line)}
+.tile{padding:18px 16px;display:grid;gap:2px;align-content:start}
+.tile+.tile{border-left:1px solid var(--line)}
+.tile .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--f-display);font-weight:800;font-stretch:80%;font-size:clamp(34px,4vw,48px);line-height:1}
+.tile .v small{font-family:var(--f-body);font-weight:500;font-stretch:100%;font-size:15px;color:var(--muted);margin-left:4px}
 .tile .s{font-size:13px;color:var(--muted)}
-.sub{color:var(--muted);font-size:14px;margin:0 0 10px}
-.donutwrap{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:center}
+@media (max-width:700px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.tile:nth-child(3){border-left:0}.tile:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+.donutwrap{display:grid;grid-template-columns:260px 1fr;gap:32px;align-items:center}
 @media (max-width:680px){.donutwrap{grid-template-columns:1fr}}
 .donut{width:100%;max-width:260px;margin:0 auto;display:block}
-.donut text{font-family:var(--display);fill:var(--ink)}
-.lg{display:grid;gap:8px}
-.lgrow{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;font-size:16px}
-.lgrow i{width:14px;height:14px;border-radius:4px;background:var(--c)}
-.lgrow b{font-family:var(--display);font-size:26px;min-width:56px;text-align:right}
-.lgrow span.j{color:var(--muted);font-size:14px;min-width:62px;text-align:right}
-.big{font-family:var(--display);font-size:38px;line-height:1.05;font-weight:700;color:var(--teal);text-wrap:balance}
-.bars{margin-top:12px;display:grid;gap:10px}
-.brow{display:grid;grid-template-columns:200px 1fr 118px;gap:10px;align-items:center;font-size:15px}
-@media (max-width:620px){.brow{grid-template-columns:1fr;gap:3px}}
-.tr{height:16px;background:var(--panel2);border-radius:8px;overflow:hidden}
-.fl{height:100%;border-radius:8px;background:var(--c);transition:width .3s}
-.val{text-align:right;font-weight:600}
-.me .brow-name{color:var(--ink);font-weight:600}
-.safe{border-top:4px solid var(--orange)}
-.safe h2{font-size:56px;line-height:1;margin-bottom:8px}
-.safe .small{font-family:var(--body);font-size:16px;font-weight:600;color:var(--orange)}
-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:15px}
-th,td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line)}
+.donut text{font-family:var(--f-display);fill:var(--ink)}
+.donut .u{font-family:var(--f-mono);fill:var(--muted)}
+.lg{display:grid;gap:0}
+.lgrow{display:grid;grid-template-columns:14px 1fr auto auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.lgrow:last-child{border-bottom:0}
+.lgrow i{width:14px;height:14px;border-radius:2px;background:var(--c)}
+.lgrow b{font-family:var(--f-display);font-weight:800;font-stretch:80%;font-size:28px;min-width:60px;text-align:right}
+.lgrow .j{font-family:var(--f-mono);color:var(--muted);font-size:13px;min-width:64px;text-align:right}
+.big{font-family:var(--f-display);font-weight:800;font-stretch:80%;font-size:clamp(30px,3.6vw,44px);line-height:1;text-transform:uppercase;text-wrap:balance}
+.bars{margin-top:16px;display:grid;gap:12px}
+.brow{display:grid;grid-template-columns:230px 1fr 130px;gap:14px;align-items:center;font-size:15px}
+@media (max-width:620px){.brow{grid-template-columns:1fr;gap:4px}}
+.tr{height:14px;background:var(--track);border-radius:2px;overflow:hidden}
+.fl{height:100%;background:var(--c);transition:width .3s}
+.val{text-align:right;font-family:var(--f-mono);font-size:13px}
+.safe{border-top:2px solid var(--ink)}
+.safe h2{font-size:clamp(40px,7vw,80px);font-weight:850;font-stretch:75%;margin-bottom:10px}
+.safe .small{font-family:var(--f-mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--zoom);font-weight:500}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:15px}
+th,td{padding:10px 6px;text-align:center;border-bottom:1px solid var(--line)}
 th:first-child,td:first-child{text-align:left}
-th{font-family:var(--display);font-size:17px;font-weight:600;color:var(--muted);letter-spacing:.03em}
-th.me,td.me{color:var(--teal)}
-td .n{font-family:var(--display);font-size:26px;font-weight:700;line-height:1}
-td .mb{height:5px;border-radius:3px;background:var(--panel2);margin:4px auto 0;max-width:90px;overflow:hidden}
-td .mb span{display:block;height:100%;background:var(--muted);border-radius:3px}
-td.me .mb span{background:var(--teal)}
-tr.tot td{border-bottom:none;font-weight:600}
-details{margin-top:6px}
-summary{cursor:pointer;font-family:var(--display);font-size:18px;color:var(--muted)}
-details p{font-size:13px;color:var(--muted);margin:6px 0 0}
+th{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+th.me,td.me{color:var(--purple)}
+td .n{font-family:var(--f-display);font-weight:800;font-stretch:80%;font-size:28px;line-height:1}
+td .mb{height:5px;border-radius:2px;background:var(--track);margin:5px auto 0;max-width:100px;overflow:hidden}
+td .mb span{display:block;height:100%;background:var(--p5)}
+td.me .mb span{background:var(--purple)}
+tr.tot td{border-bottom:0}
+details{border-top:1px solid var(--line);padding-top:14px}
+summary{cursor:pointer;font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+details p{font-size:13px;color:var(--muted);margin:8px 0 0;max-width:80ch}
 @media (prefers-reduced-motion:reduce){.fl{transition:none}}
-</style>
-<style>
 html.embed .eyebrow,html.embed h1,html.embed .lede{display:none!important}
-html.embed .wrap{padding:16px!important;max-width:none!important}
+html.embed body{background:transparent}
+html.embed .wrap{padding:0!important;max-width:none!important}
 </style>
 <script>
 (function(){if(window.self!==window.top||/[?&]embed/.test(location.search)){document.documentElement.classList.add('embed');}})();
@@ -79,11 +93,11 @@ html.embed .wrap{padding:16px!important;max-width:none!important}
 </head>
 <body>
 <div class="wrap">
-  <div class="eyebrow">APPLIED PHYSICS</div>
-  <h1>What happens inside the shoe when you land</h1>
+  <div class="eyebrow">The Perfect Shoe</div>
+  <h1>Applied physics</h1>
   <p class="lede">A basketball player lands from a jump and cuts hard. Pick a weight and see the forces, where the energy comes back from, and how this shoe stacks up.</p>
 
-  <div class="panel mass">
+  <div class="block mass">
     <label for="mass">Player weight</label>
     <input id="mass" type="range" min="60" max="120" step="1" value="80">
     <output id="o_mass">80 kg</output>
@@ -91,7 +105,7 @@ html.embed .wrap{padding:16px!important;max-width:none!important}
 
   <div class="tiles" id="tiles"></div>
 
-  <div class="panel">
+  <div class="block">
     <h2>Where the energy return comes from</h2>
     <p class="sub">Every part of the sole gives a share of the energy back into your next step.</p>
     <div class="donutwrap">
@@ -100,23 +114,23 @@ html.embed .wrap{padding:16px!important;max-width:none!important}
     </div>
   </div>
 
-  <div class="panel">
+  <div class="block">
     <h2>Energy returned, next to real shoes</h2>
     <div class="big" id="gain"></div>
-    <p class="sub" id="gainsub" style="margin-top:4px"></p>
+    <p class="sub" id="gainsub" style="margin-top:8px"></p>
     <div class="bars" id="cmp"></div>
   </div>
 
-  <div class="panel safe">
+  <div class="block safe">
     <h2>Built to protect your foot</h2>
     <div class="small" id="safeHead"></div>
-    <p class="sub" id="safeSub" style="margin-top:6px"></p>
+    <p class="sub" id="safeSub" style="margin-top:10px"></p>
     <table id="score"></table>
   </div>
 
   <details>
     <summary>About these numbers</summary>
-    <p>Demo model for presenting the design idea. The landing force (3.0 body weights), sideways force (1.6 body weights) and the energy-return figures for the Nike, adidas and typical shoe come from published studies and lab tests (J Sports Sci Med 2011; Lam 2017; RunRepeat). This shoe's 76% return, the split between parts, the ankle-force share and the safety scores are design targets, not measurements from a built shoe.</p>
+    <p>Landing force (3.0 body weights), sideways force (1.6 body weights) and the energy-return figures for the Nike, adidas and typical shoe come from published studies and lab tests (J Sports Sci Med 2011; Lam 2017; RunRepeat). This shoe's 76% return, the split between parts, the ankle-force share and the safety scores are design targets, not measurements from a built shoe.</p>
   </details>
 </div>
 <script>
@@ -124,17 +138,16 @@ const $=id=>document.getElementById(id);
 const g=9.81;
 const f0=v=>Math.round(v).toLocaleString('en-US'), f1=v=>v.toFixed(1);
 
-/* Calibration: forces scale with body weight; energy absorbed scales a bit faster than linear */
+/* Forces scale with body weight; absorbed energy scales a bit faster than linear */
 const K={fv:3.0, fh:1.58, tq:0.01022*1.88, Ea80:6.9, ret:0.76, nike:0.832, adi:0.511, typ:0.623, leak:{me:0.22,typ:0.40}};
 
 const PARTS=[
-  {n:'Zoom Air strobel', c:'#9b5cff', s:35},
-  {n:'Carbon fiber plate', c:'#2dd4bf', s:25},
-  {n:'React-type foam', c:'#ff8a3d', s:20},
-  {n:'Upper & heel lock', c:'#6cb4ff', s:12},
-  {n:'Cupsole wall', c:'#ff5c93', s:8}
+  {n:'Zoom Air strobel', c:'var(--p1)', s:35},
+  {n:'Carbon fiber plate', c:'var(--p2)', s:25},
+  {n:'React-type foam', c:'var(--p3)', s:20},
+  {n:'Upper & heel lock', c:'var(--p4)', s:12},
+  {n:'Cupsole wall', c:'var(--p5)', s:8}
 ];
-
 const SAFETY=[
   ['Ankle-roll protection',92,70],
   ['Impact shock absorbed',88,75],
@@ -147,12 +160,12 @@ function donut(total){
   let s='<g transform="rotate(-90 100 100)">';
   PARTS.forEach(p=>{
     const len=C*p.s/100;
-    s+=`<circle cx="100" cy="100" r="${R}" fill="none" stroke="${p.c}" stroke-width="30" stroke-dasharray="${len-1.5} ${C-len+1.5}" stroke-dashoffset="${-off}"/>`;
+    s+=`<circle cx="100" cy="100" r="${R}" fill="none" style="stroke:${p.c}" stroke-width="30" stroke-dasharray="${len-1.5} ${C-len+1.5}" stroke-dashoffset="${-off}"/>`;
     off+=len;
   });
   s+='</g>';
-  s+=`<text x="100" y="104" text-anchor="middle" font-size="38" font-weight="700">${f1(total)}</text>`;
-  s+=`<text x="100" y="124" text-anchor="middle" font-size="15" style="fill:#a49fbf">J RETURNED</text>`;
+  s+=`<text x="100" y="104" text-anchor="middle" font-size="40" font-weight="800">${f1(total)}</text>`;
+  s+=`<text class="u" x="100" y="124" text-anchor="middle" font-size="10" letter-spacing="1.5">J RETURNED</text>`;
   $('donut').innerHTML=s;
   $('legend').innerHTML=PARTS.map(p=>`<div class="lgrow" style="--c:${p.c}"><i></i><span>${p.n}</span><b>${p.s}%</b><span class="j">${f1(total*p.s/100)} J</span></div>`).join('');
 }
@@ -164,19 +177,19 @@ function render(){
   const Er=Ea*K.ret, En=Ea*K.nike, Ea_=Ea*K.adi, Et=Ea*K.typ;
 
   const tiles=[
-    ['GROUND FORCE',(Fv/1000).toFixed(2),'kN',`${K.fv.toFixed(1)}× body weight`,'var(--orange)'],
-    ['ENERGY RETURNED',f1(Er),'J',`${Math.round(K.ret*100)}% of the landing`,'var(--teal)'],
-    ['TWIST HELD',f1(TQ),'N·m','torsional force on the shoe','var(--purple)'],
-    ['SIDEWAYS FORCE',f0(Fh),'N','pushed on the shoe in the cut','var(--pink)']
+    ['Ground force',(Fv/1000).toFixed(2),'kN',`${K.fv.toFixed(1)}× body weight`],
+    ['Energy returned',f1(Er),'J',`${Math.round(K.ret*100)}% of the landing`],
+    ['Twist held',f1(TQ),'N·m','torsional force on the shoe'],
+    ['Sideways force',f0(Fh),'N','pushed on the shoe in the cut']
   ];
-  $('tiles').innerHTML=tiles.map(t=>`<div class="tile" style="--c:${t[4]}"><div class="k">${t[0]}</div><div class="v">${t[1]}<small>${t[2]}</small></div><div class="s">${t[3]}</div></div>`).join('');
+  $('tiles').innerHTML=tiles.map(t=>`<div class="tile"><span class="k">${t[0]}</span><div class="v">${t[1]}<small>${t[2]}</small></div><span class="s">${t[3]}</span></div>`).join('');
 
   donut(Er);
 
-  const rows=[['Nike G.T. Cut 3 Turbo',En,K.nike,'var(--orange)'],['Perfect Shoe (design target)',Er,K.ret,'var(--teal)'],['Typical basketball shoe',Et,K.typ,'var(--muted)'],['adidas Believe That 1',Ea_,K.adi,'var(--muted)']];
+  const rows=[['Nike G.T. Cut 3 Turbo',En,K.nike,'var(--p5)'],['Perfect Shoe (design target)',Er,K.ret,'var(--purple)'],['Typical basketball shoe',Et,K.typ,'var(--p5)'],['adidas Believe That 1',Ea_,K.adi,'var(--p5)']];
   const mx=Math.max(...rows.map(r=>r[1]));
   $('gain').textContent=`${Math.round(K.ret*100)}% of the landing energy comes back`;
-  $('gainsub').textContent=`Lab results for the other shoes (RunRepeat). The Perfect Shoe figure is a design target.`;
+  $('gainsub').textContent='Lab results for the other shoes (RunRepeat). The Perfect Shoe figure is a design target.';
   $('cmp').innerHTML=rows.map(r=>`<div class="brow" style="--c:${r[3]}"><span style="${r[0].startsWith('Perfect')?'font-weight:600':''}">${r[0]}</span><span class="tr"><span class="fl" style="display:block;width:${r[1]/mx*100}%"></span></span><span class="val">${f1(r[1])} J · ${Math.round(r[2]*100)}%</span></div>`).join('');
 
   const avg=i=>SAFETY.reduce((a,r)=>a+r[i],0)/SAFETY.length;

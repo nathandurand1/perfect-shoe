@@ -1,8 +1,8 @@
 # Site change log (read before editing index.html)
 
-Two agents edit this site at the same time. To keep each other's work:
+This site can be edited from more than one place at the same time. To keep each other's work:
 
-1. **Always `git pull` / fetch the latest `index.html` from this repo before editing.** Never upload `index.html` from an old local copy; it silently undoes the other agent's changes. Edit the repo's current file in place.
+1. **Always `git pull` / fetch the latest `index.html` from this repo before editing.** Never upload `index.html` from an old local copy; it silently undoes the other edit's changes. Edit the repo's current file in place.
 2. Make small, targeted edits, then fetch and rebase right before pushing.
 3. Do not bring back anything listed under "Removed on purpose".
 

@@ -3,179 +3,138 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Applied physics | The Perfect Shoe</title>
+<title>The Perfect Shoe: Applied Physics Simulator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* Same dark "stage" look as the 3D shoe viewer on the main site */
-:root{
-  --stage:#0c0b10;--stage-2:#15131b;--fg:#eeebf4;--mut:#9b96a8;--line:#26232e;--line2:#3a3645;
-  --purple:#9a6cf0;--purple-ink:#b394f5;--zoom:#e8871e;--zoom-lt:#f2b872;
-  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
-  --f-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
-  color-scheme:dark;
-}
+:root{--bg:#0c0a16;--panel:#15121f;--panel2:#1f1b2e;--ink:#f1eefb;--muted:#a49fbf;--line:#2b2540;
+--purple:#9b5cff;--teal:#2dd4bf;--orange:#ff8a3d;--pink:#ff5c93;--blue:#6cb4ff;
+--display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;--body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:#f2eee8;font-family:var(--f-body);font-size:16px;line-height:1.5;color:var(--fg);font-variant-numeric:tabular-nums}
-.page{max-width:1280px;margin:0 auto;padding:24px 20px}
-.wrap{background:radial-gradient(ellipse 110% 70% at 85% -10%,rgba(154,108,240,.22) 0%,rgba(0,0,0,0) 60%),radial-gradient(ellipse 120% 80% at 50% 120%,#1b1724 0%,rgba(0,0,0,0) 60%),var(--stage);
-  border-radius:8px;padding:30px;display:grid;gap:18px}
-h1,h2,h3{font-family:var(--f-display);margin:0;text-transform:uppercase;text-wrap:balance;line-height:.95}
-h3{font-weight:800;font-stretch:80%;font-size:24px;letter-spacing:.01em}
-.k{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
-.sub{color:var(--mut);font-size:14px;margin:0}
-:focus-visible{outline:2px solid var(--zoom);outline-offset:3px}
-.card{background:var(--stage-2);border:1px solid var(--line);border-radius:8px;padding:22px}
-
-/* top: weight + tiles */
-.top{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:18px;align-items:stretch}
-.wt{display:grid;align-content:space-between;gap:10px;padding:6px 4px}
-.wt output{font-family:var(--f-display);font-weight:850;font-stretch:75%;font-size:clamp(64px,9vw,112px);line-height:.9;color:var(--fg)}
-.wt output small{font-size:.32em;color:var(--purple-ink);margin-left:8px;letter-spacing:.04em}
-.wt input{width:100%;accent-color:var(--purple);height:30px;margin:0}
-.ticks{display:flex;justify-content:space-between}
-.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.tile{background:var(--stage-2);border:1px solid var(--line);border-left:3px solid var(--c);border-radius:6px;padding:14px 16px;display:grid;gap:2px}
-.tile .v{font-family:var(--f-display);font-weight:850;font-stretch:78%;font-size:clamp(38px,4.6vw,56px);line-height:1;color:var(--c)}
-.tile .v small{font-family:var(--f-body);font-weight:500;font-stretch:100%;font-size:15px;color:var(--mut);margin-left:5px}
-.tile .s{font-size:13px;color:var(--mut)}
-
-/* middle: donut + comparison */
-.mid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
-.card h3{margin-bottom:6px}
-.dn{display:grid;grid-template-columns:230px minmax(0,1fr);gap:24px;align-items:center;margin-top:12px}
-.donut{width:100%;display:block}
-.donut text{font-family:var(--f-display);fill:var(--fg)}
-.donut .u{font-family:var(--f-mono);fill:var(--mut)}
-.lg{display:grid;gap:9px}
-.lgrow{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:10px;align-items:baseline;font-size:14px}
-.lgrow i{width:12px;height:12px;border-radius:2px;background:var(--c);align-self:center}
-.lgrow b{font-family:var(--f-display);font-weight:800;font-stretch:80%;font-size:22px;color:var(--fg)}
-.lgrow b small{font-family:var(--f-mono);font-weight:400;font-size:11px;color:var(--mut);margin-left:6px}
-.big{font-family:var(--f-display);font-weight:850;font-stretch:75%;font-size:clamp(54px,6vw,84px);line-height:.9;color:var(--purple-ink)}
-.big small{display:block;font-size:16px;line-height:1.3;color:var(--fg);font-family:var(--f-body);font-weight:500;font-stretch:100%;margin:8px 0 0;text-transform:none}
-.card.d{display:flex;flex-direction:column}
-.card.d .dn{flex:1;align-content:center}
-.bars{margin-top:16px;display:grid;gap:11px}
-.brow{display:grid;gap:4px}
-.brow .t{display:flex;justify-content:space-between;gap:10px;font-size:14px}
-.brow .t span:last-child{font-family:var(--f-mono);font-size:12px;color:var(--mut)}
-.tr{height:12px;background:#24212c;border-radius:2px;overflow:hidden}
-.fl{display:block;height:100%;background:var(--c);transition:width .3s}
-
-/* hero: safety */
-.hero{background:linear-gradient(135deg,#3b1d73 0%,#1b1033 55%,#15131b 100%);border:1px solid #4a2f8a;border-radius:8px;padding:30px;display:grid;gap:24px}
-.hero h2{font-weight:850;font-stretch:75%;font-size:clamp(44px,7.4vw,96px);color:#fff}
-.hero .small{font-family:var(--f-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--zoom-lt);margin-top:12px}
-.hrow{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:30px;align-items:end}
-.ank{display:grid;gap:12px}
-.ank .row{display:grid;gap:5px}
-.ank .n{font-family:var(--f-display);font-weight:850;font-stretch:78%;font-size:46px;line-height:1}
-.ank .n small{font-family:var(--f-mono);font-weight:400;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#c9bde6;margin-left:10px}
-.ank .tr{background:rgba(255,255,255,.12)}
-.scores{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.sc{background:rgba(12,11,16,.55);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:12px 12px 14px;display:grid;gap:4px}
-.sc.all{border-color:var(--zoom);background:rgba(232,135,30,.12)}
-.sc .n{font-family:var(--f-display);font-weight:850;font-stretch:78%;font-size:44px;line-height:1;color:#fff}
-.sc.all .n{color:var(--zoom-lt)}
-.sc .t{position:relative;height:6px;background:rgba(255,255,255,.14);border-radius:3px;margin-top:6px}
-.sc .t span{display:block;height:100%;background:var(--purple-ink);border-radius:3px}
-.sc.all .t span{background:var(--zoom)}
-.sc .t i{position:absolute;top:-4px;width:2px;height:14px;background:#fff;opacity:.8}
-.sc .vs{font-size:12px;color:#c9bde6}
-.legend-note{font-size:12px;color:#c9bde6;margin:0}
-details{color:var(--mut)}
-summary{cursor:pointer;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
-details p{font-size:13px;margin:8px 0 0;max-width:90ch}
-
-@media (max-width:900px){.top,.mid,.hrow{grid-template-columns:minmax(0,1fr)}.scores{grid-template-columns:repeat(2,minmax(0,1fr))}.dn{grid-template-columns:150px minmax(0,1fr)}}
-@media (max-width:520px){.wrap{padding:18px}.dn{grid-template-columns:minmax(0,1fr)}.donut{max-width:200px;margin:0 auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;font-variant-numeric:tabular-nums;
+background-image:radial-gradient(900px 380px at 85% -100px,rgba(155,92,255,.22),transparent 70%)}
+.wrap{max-width:900px;margin:0 auto;padding:22px 16px 40px}
+.eyebrow{font-family:var(--display);letter-spacing:.24em;font-size:15px;color:var(--purple);font-weight:700}
+h1{font-family:var(--display);font-size:44px;line-height:1;margin:2px 0 6px;text-wrap:balance}
+h2{font-family:var(--display);font-size:26px;line-height:1.05;margin:0 0 4px;text-wrap:balance}
+.lede{color:var(--muted);margin:0 0 16px;font-size:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.mass{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mass label{font-weight:600;font-size:17px}
+.mass input{flex:1;min-width:200px;accent-color:var(--purple);height:28px}
+.mass output{font-family:var(--display);font-size:34px;font-weight:700;color:var(--purple);min-width:92px;text-align:right}
+:focus-visible{outline:3px solid var(--purple);outline-offset:2px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:12px;padding:12px 14px}
+.tile .k{font-size:12px;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.tile .v{font-family:var(--display);font-size:42px;line-height:1.05;font-weight:700;color:var(--c)}
+.tile .v small{font-size:17px;color:var(--muted);margin-left:4px}
+.tile .s{font-size:13px;color:var(--muted)}
+.sub{color:var(--muted);font-size:14px;margin:0 0 10px}
+.donutwrap{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:center}
+@media (max-width:680px){.donutwrap{grid-template-columns:1fr}}
+.donut{width:100%;max-width:260px;margin:0 auto;display:block}
+.donut text{font-family:var(--display);fill:var(--ink)}
+.lg{display:grid;gap:8px}
+.lgrow{display:grid;grid-template-columns:14px 1fr auto auto;gap:10px;align-items:center;font-size:16px}
+.lgrow i{width:14px;height:14px;border-radius:4px;background:var(--c)}
+.lgrow b{font-family:var(--display);font-size:26px;min-width:56px;text-align:right}
+.lgrow span.j{color:var(--muted);font-size:14px;min-width:62px;text-align:right}
+.big{font-family:var(--display);font-size:38px;line-height:1.05;font-weight:700;color:var(--teal);text-wrap:balance}
+.bars{margin-top:12px;display:grid;gap:10px}
+.brow{display:grid;grid-template-columns:200px 1fr 118px;gap:10px;align-items:center;font-size:15px}
+@media (max-width:620px){.brow{grid-template-columns:1fr;gap:3px}}
+.tr{height:16px;background:var(--panel2);border-radius:8px;overflow:hidden}
+.fl{height:100%;border-radius:8px;background:var(--c);transition:width .3s}
+.val{text-align:right;font-weight:600}
+.me .brow-name{color:var(--ink);font-weight:600}
+.safe{border-top:4px solid var(--orange)}
+.safe h2{font-size:56px;line-height:1;margin-bottom:8px}
+.safe .small{font-family:var(--body);font-size:16px;font-weight:600;color:var(--orange)}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:15px}
+th,td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{font-family:var(--display);font-size:17px;font-weight:600;color:var(--muted);letter-spacing:.03em}
+th.me,td.me{color:var(--teal)}
+td .n{font-family:var(--display);font-size:26px;font-weight:700;line-height:1}
+td .mb{height:5px;border-radius:3px;background:var(--panel2);margin:4px auto 0;max-width:90px;overflow:hidden}
+td .mb span{display:block;height:100%;background:var(--muted);border-radius:3px}
+td.me .mb span{background:var(--teal)}
+tr.tot td{border-bottom:none;font-weight:600}
+details{margin-top:6px}
+summary{cursor:pointer;font-family:var(--display);font-size:18px;color:var(--muted)}
+details p{font-size:13px;color:var(--muted);margin:6px 0 0}
 @media (prefers-reduced-motion:reduce){.fl{transition:none}}
-
-.hd{display:grid;gap:6px;margin-bottom:6px}
-.hd h1{font-weight:850;font-stretch:75%;font-size:clamp(40px,6vw,72px)}
-html.embed body{background:transparent}
-html.embed .page{padding:0;max-width:none}
-html.embed .hd{display:none}
+</style>
+<style>
+html.embed .eyebrow,html.embed h1,html.embed .lede{display:none!important}
+html.embed .wrap{padding:16px!important;max-width:none!important}
 </style>
 <script>
 (function(){if(window.self!==window.top||/[?&]embed/.test(location.search)){document.documentElement.classList.add('embed');}})();
 </script>
 </head>
 <body>
-<div class="page">
-<div class="wrap" id="app">
-  <div class="hd">
-    <div class="k">The Perfect Shoe</div>
-    <h1>Applied physics</h1>
-    <p class="sub">A basketball player lands from a jump and cuts hard. Pick a weight and see what happens inside the shoe.</p>
+<div class="wrap">
+  <div class="eyebrow">APPLIED PHYSICS</div>
+  <h1>What happens inside the shoe when you land</h1>
+  <p class="lede">A basketball player lands from a jump and cuts hard. Pick a weight and see the forces, where the energy comes back from, and how this shoe stacks up.</p>
+
+  <div class="panel mass">
+    <label for="mass">Player weight</label>
+    <input id="mass" type="range" min="60" max="120" step="1" value="80">
+    <output id="o_mass">80 kg</output>
   </div>
 
-  <div class="top">
-    <div class="wt">
-      <span class="k"><label for="mass">Player weight</label></span>
-      <output id="o_mass"></output>
-      <div>
-        <input id="mass" type="range" min="60" max="120" step="1" value="80">
-        <div class="ticks k"><span>60 kg</span><span>120 kg</span></div>
-      </div>
+  <div class="tiles" id="tiles"></div>
+
+  <div class="panel">
+    <h2>Where the energy return comes from</h2>
+    <p class="sub">Every part of the sole gives a share of the energy back into your next step.</p>
+    <div class="donutwrap">
+      <svg class="donut" id="donut" viewBox="0 0 200 200" role="img" aria-label="Share of energy return by part"></svg>
+      <div class="lg" id="legend"></div>
     </div>
-    <div class="tiles" id="tiles"></div>
   </div>
 
-  <div class="mid">
-    <section class="card d">
-      <h3>Where the energy comes from</h3>
-      <p class="sub">Each part of the sole gives a share back into your next step.</p>
-      <div class="dn">
-        <svg class="donut" id="donut" viewBox="0 0 200 200" role="img" aria-label="Share of energy return by part"></svg>
-        <div class="lg" id="legend"></div>
-      </div>
-    </section>
-    <section class="card">
-      <h3>Energy returned, next to real shoes</h3>
-      <div class="big" id="gain" style="margin-top:12px"></div>
-      <p class="sub" id="gainsub" style="margin-top:6px"></p>
-      <div class="bars" id="cmp"></div>
-    </section>
+  <div class="panel">
+    <h2>Energy returned, next to real shoes</h2>
+    <div class="big" id="gain"></div>
+    <p class="sub" id="gainsub" style="margin-top:4px"></p>
+    <div class="bars" id="cmp"></div>
   </div>
 
-  <section class="hero">
-    <div class="hrow">
-      <div>
-        <h2>Built to protect your foot</h2>
-        <div class="small" id="safeHead"></div>
-      </div>
-      <div class="ank" id="ank"></div>
-    </div>
-    <div class="scores" id="score"></div>
-    <p class="legend-note">White tick = typical basketball shoe. Safety scores are design targets.</p>
-  </section>
+  <div class="panel safe">
+    <h2>Built to protect your foot</h2>
+    <div class="small" id="safeHead"></div>
+    <p class="sub" id="safeSub" style="margin-top:6px"></p>
+    <table id="score"></table>
+  </div>
 
   <details>
     <summary>About these numbers</summary>
-    <p>Landing force (3.0 body weights), sideways force (1.6 body weights) and the energy-return figures for the Nike, adidas and typical shoe come from published studies and lab tests (J Sports Sci Med 2011; Lam 2017; RunRepeat). This shoe's 76% return, the split between parts, the ankle-force share and the safety scores are design targets, not measurements from a built shoe.</p>
+    <p>Demo model for presenting the design idea. The landing force (3.0 body weights), sideways force (1.6 body weights) and the energy-return figures for the Nike, adidas and typical shoe come from published studies and lab tests (J Sports Sci Med 2011; Lam 2017; RunRepeat). This shoe's 76% return, the split between parts, the ankle-force share and the safety scores are design targets, not measurements from a built shoe.</p>
   </details>
-</div>
 </div>
 <script>
 const $=id=>document.getElementById(id);
 const g=9.81;
 const f0=v=>Math.round(v).toLocaleString('en-US'), f1=v=>v.toFixed(1);
 
-/* Forces scale with body weight; absorbed energy scales a bit faster than linear */
+/* Calibration: forces scale with body weight; energy absorbed scales a bit faster than linear */
 const K={fv:3.0, fh:1.58, tq:0.01022*1.88, Ea80:6.9, ret:0.76, nike:0.832, adi:0.511, typ:0.623, leak:{me:0.22,typ:0.40}};
 
 const PARTS=[
-  {n:'Zoom Air strobel', c:'#9a6cf0', s:35},
-  {n:'Carbon fiber plate', c:'#e8871e', s:25},
-  {n:'React-type foam', c:'#eeebf4', s:20},
-  {n:'Upper & heel lock', c:'#6b45b0', s:12},
-  {n:'Cupsole wall', c:'#6c6777', s:8}
+  {n:'Zoom Air strobel', c:'#9b5cff', s:35},
+  {n:'Carbon fiber plate', c:'#2dd4bf', s:25},
+  {n:'React-type foam', c:'#ff8a3d', s:20},
+  {n:'Upper & heel lock', c:'#6cb4ff', s:12},
+  {n:'Cupsole wall', c:'#ff5c93', s:8}
 ];
+
 const SAFETY=[
   ['Ankle-roll protection',92,70],
   ['Impact shock absorbed',88,75],
@@ -192,45 +151,43 @@ function donut(total){
     off+=len;
   });
   s+='</g>';
-  s+=`<text x="100" y="106" text-anchor="middle" font-size="44" font-weight="850">${f1(total)}</text>`;
-  s+=`<text class="u" x="100" y="126" text-anchor="middle" font-size="10" letter-spacing="1.5">J RETURNED</text>`;
+  s+=`<text x="100" y="104" text-anchor="middle" font-size="38" font-weight="700">${f1(total)}</text>`;
+  s+=`<text x="100" y="124" text-anchor="middle" font-size="15" style="fill:#a49fbf">J RETURNED</text>`;
   $('donut').innerHTML=s;
-  $('legend').innerHTML=PARTS.map(p=>`<div class="lgrow" style="--c:${p.c}"><i></i><span>${p.n}</span><b>${p.s}%<small>${f1(total*p.s/100)} J</small></b></div>`).join('');
+  $('legend').innerHTML=PARTS.map(p=>`<div class="lgrow" style="--c:${p.c}"><i></i><span>${p.n}</span><b>${p.s}%</b><span class="j">${f1(total*p.s/100)} J</span></div>`).join('');
 }
 
 function render(){
-  const m=+$('mass').value; $('o_mass').innerHTML=`${m}<small>kg</small>`;
+  const m=+$('mass').value; $('o_mass').textContent=m+' kg';
   const BW=m*g, Fv=K.fv*BW, Fh=K.fh*BW, TQ=K.tq*BW;
   const Ea=K.Ea80*Math.pow(m/80,1.3);
   const Er=Ea*K.ret, En=Ea*K.nike, Ea_=Ea*K.adi, Et=Ea*K.typ;
 
   const tiles=[
-    ['Ground force',(Fv/1000).toFixed(2),'kN',`${K.fv.toFixed(1)}× body weight`,'#e8871e'],
-    ['Energy returned',f1(Er),'J',`${Math.round(K.ret*100)}% of the landing`,'#b394f5'],
-    ['Twist held',f1(TQ),'N·m','torsional force on the shoe','#eeebf4'],
-    ['Sideways force',f0(Fh),'N','pushed on the shoe in the cut','#f2b872']
+    ['GROUND FORCE',(Fv/1000).toFixed(2),'kN',`${K.fv.toFixed(1)}× body weight`,'var(--orange)'],
+    ['ENERGY RETURNED',f1(Er),'J',`${Math.round(K.ret*100)}% of the landing`,'var(--teal)'],
+    ['TWIST HELD',f1(TQ),'N·m','torsional force on the shoe','var(--purple)'],
+    ['SIDEWAYS FORCE',f0(Fh),'N','pushed on the shoe in the cut','var(--pink)']
   ];
-  $('tiles').innerHTML=tiles.map(t=>`<div class="tile" style="--c:${t[4]}"><span class="k">${t[0]}</span><div class="v">${t[1]}<small>${t[2]}</small></div><span class="s">${t[3]}</span></div>`).join('');
+  $('tiles').innerHTML=tiles.map(t=>`<div class="tile" style="--c:${t[4]}"><div class="k">${t[0]}</div><div class="v">${t[1]}<small>${t[2]}</small></div><div class="s">${t[3]}</div></div>`).join('');
 
   donut(Er);
 
-  const rows=[['Nike G.T. Cut 3 Turbo',En,K.nike,'#6c6777'],['Perfect Shoe',Er,K.ret,'#9a6cf0'],['Typical basketball shoe',Et,K.typ,'#6c6777'],['adidas Believe That 1',Ea_,K.adi,'#6c6777']];
+  const rows=[['Nike G.T. Cut 3 Turbo',En,K.nike,'var(--orange)'],['Perfect Shoe (design target)',Er,K.ret,'var(--teal)'],['Typical basketball shoe',Et,K.typ,'var(--muted)'],['adidas Believe That 1',Ea_,K.adi,'var(--muted)']];
   const mx=Math.max(...rows.map(r=>r[1]));
-  $('gain').innerHTML=`${Math.round(K.ret*100)}%<small>of the landing energy comes back</small>`;
-  $('gainsub').textContent='Lab results for the other shoes (RunRepeat). The Perfect Shoe figure is a design target.';
-  $('cmp').innerHTML=rows.map(r=>`<div class="brow" style="--c:${r[3]}"><div class="t"><span style="${r[0]==='Perfect Shoe'?'font-weight:600;color:#fff':''}">${r[0]}</span><span>${f1(r[1])} J · ${Math.round(r[2]*100)}%</span></div><span class="tr"><span class="fl" style="width:${r[1]/mx*100}%"></span></span></div>`).join('');
+  $('gain').textContent=`${Math.round(K.ret*100)}% of the landing energy comes back`;
+  $('gainsub').textContent=`Lab results for the other shoes (RunRepeat). The Perfect Shoe figure is a design target.`;
+  $('cmp').innerHTML=rows.map(r=>`<div class="brow" style="--c:${r[3]}"><span style="${r[0].startsWith('Perfect')?'font-weight:600':''}">${r[0]}</span><span class="tr"><span class="fl" style="display:block;width:${r[1]/mx*100}%"></span></span><span class="val">${f1(r[1])} J · ${Math.round(r[2]*100)}%</span></div>`).join('');
 
   const avg=i=>SAFETY.reduce((a,r)=>a+r[i],0)/SAFETY.length;
   const A=[avg(1),avg(2)];
   const cut=Math.round((1-K.leak.me/K.leak.typ)*100);
   $('safeHead').textContent=`${cut}% less sideways force reaches the ankle`;
-  const me=Fh*K.leak.me, ty=Fh*K.leak.typ;
-  $('ank').innerHTML=
-    `<span class="k" style="color:#c9bde6">Of ${f0(Fh)} N sideways force at ${m} kg, this reaches your ankle</span>`+
-    `<div class="row"><div class="n" style="color:#fff">${f0(me)} N<small>Perfect Shoe</small></div><span class="tr"><span class="fl" style="width:${me/ty*100}%;background:#b394f5"></span></span></div>`+
-    `<div class="row"><div class="n" style="color:#c9bde6">${f0(ty)} N<small>Typical shoe</small></div><span class="tr"><span class="fl" style="width:100%;background:#8d86a3"></span></span></div>`;
-  const chip=(label,a,b,all)=>`<div class="sc${all?' all':''}"><span class="k" style="color:#c9bde6">${label}</span><div class="n">${a}</div><div class="t"><span style="width:${a}%"></span><i style="left:${b}%"></i></div><span class="vs">typical ${b}</span></div>`;
-  $('score').innerHTML=SAFETY.map(r=>chip(r[0],r[1],r[2],false)).join('')+chip('Overall',Math.round(A[0]),Math.round(A[1]),true);
+  $('safeSub').innerHTML=`In a hard cut at ${m} kg, the cup, plate and heel lock hold back the sideways push. Only <b>${f0(Fh*K.leak.me)} N</b> of the ${f0(Fh)} N reaches your ankle, compared with about ${f0(Fh*K.leak.typ)} N in a typical basketball shoe. Design targets.`;
+  const cell=(v,cls)=>`<td class="${cls}"><div class="n">${v}</div><div class="mb"><span style="width:${v}%"></span></div></td>`;
+  $('score').innerHTML=`<thead><tr><th>Safety score (higher is safer)</th><th class="me">Perfect Shoe</th><th>Typical shoe</th></tr></thead><tbody>`+
+    SAFETY.map(r=>`<tr><td>${r[0]}</td>${cell(r[1],'me')}${cell(r[2],'')}</tr>`).join('')+
+    `<tr class="tot"><td>Overall</td>${cell(Math.round(A[0]),'me')}${cell(Math.round(A[1]),'')}</tr></tbody>`;
 }
 $('mass').addEventListener('input',render);
 render();

@@ -110,12 +110,12 @@ window.addEventListener('load',send);new ResizeObserver(send).observe(document.d
 <body>
 <div class="wrap">
   <a class="back" href="./">&larr; The Perfect Shoe</a>
-  <h1>The Perfect Shoe: business simulator</h1>
-  <p class="lede">Could this shoe realistically sell? This simulation shows how the shoe would actually perform in the market if it were released for production.</p>
+  <h1>The Perfect Shoe: business model</h1>
+  <p class="lede">Could this shoe realistically sell? This is a what-if model, not real sales data. It estimates how the shoe might perform if a company like Nike produced it, using public market figures where I could find them and my own assumptions where I could not.</p>
   <div class="timeline" aria-label="Timeline">
     <div class="chip"><b>2024</b> Development and tooling</div>
     <div class="chip"><b>2025</b> Launch</div>
-    <div class="chip now"><b>2026</b> Peak year, today</div>
+    <div class="chip now"><b>2026</b> Peak year (modeled)</div>
     <div class="chip proj"><b>2027</b> Projected decline</div>
   </div>
 
@@ -322,8 +322,8 @@ function render(){
   document.querySelectorAll('button.opt').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sc===scenario));
   const win=r.totalEbit>=0;
   $('verdict').textContent = win
-    ? `At ${'$'+p.price} and ${num(r.peak)} pairs in the peak year, this shoe earns about ${money(r.totalEbit)} before tax from 2024 to 2027 and earns back its ${money(r.fixedTotal)} development and tooling spend in ${r.payback}.`
-    : `At ${'$'+p.price} and ${num(r.peak)} pairs in the peak year, this shoe loses about ${money(-r.totalEbit)} before tax from 2024 to 2027. ${isFinite(r.be)?`It would need about ${num(r.be)} pairs to earn back its ${money(r.fixedTotal)} up-front spend.`:`At this price each pair doesn't make enough to ever earn back the ${money(r.fixedTotal)} up-front spend.`}`;
+    ? `At ${'$'+p.price} and ${num(r.peak)} pairs in the peak year, in this model the shoe earns about ${money(r.totalEbit)} before tax from 2024 to 2027 and earns back its ${money(r.fixedTotal)} development and tooling spend in ${r.payback}.`
+    : `At ${'$'+p.price} and ${num(r.peak)} pairs in the peak year, in this model the shoe loses about ${money(-r.totalEbit)} before tax from 2024 to 2027. ${isFinite(r.be)?`It would need about ${num(r.be)} pairs to earn back its ${money(r.fixedTotal)} up-front spend.`:`At this price each pair doesn't make enough to ever earn back the ${money(r.fixedTotal)} up-front spend.`}`;
   const em=r.totalRev?r.totalEbit/r.totalRev:0;
   const tiles=[
     ['Profit, 2024-2027',money(r.totalEbit),'Pre-tax, after all costs',win?'good':'bad'],

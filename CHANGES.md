@@ -15,3 +15,4 @@ Two agents edit this site at the same time. To keep each other's work:
 - "From the references" note in the part panels (`took:` field in `FEATURES`).
 - Embedded business simulator in "Could it sell?" (`business-sim.html`).
 - **Applied physics** section (`id="physics"`, before "Could it sell?") with a nav link: embedded physics simulator (`physics-sim.html`), same iframe pattern as the business simulator. Added Nov 17, 2026.
+- "Could it sell?" relabeled as a what-if model (not real sales data); simulator page is now "business model". Embed version bumped to v=5. Nov 18, 2026.

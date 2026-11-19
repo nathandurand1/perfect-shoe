@@ -17,3 +17,4 @@ This site can be edited from more than one place at the same time. To keep each 
 - **Applied physics** section (`id="physics"`, before "Could it sell?") with a nav link: embedded physics simulator (`physics-sim.html`), same iframe pattern as the business simulator. Added Nov 17, 2026.
 - "Could it sell?" relabeled as a what-if model (not real sales data); simulator page is now "business model". Embed version bumped to v=5. Nov 18, 2026.
 - Upper material wording changed from "engineered knit (like Flyknit)" to **engineered mesh** with a TPU mesh overlay, in the Materials list, the upper and TPU panels, and the business model note. Internal ids (`filon`, `TEX.knit`) are unchanged on purpose. Embed version bumped to v=6. Nov 18, 2026.
+- Mesh upper panel now references the GT Cut 2 (`from:` tag and `took:` note). Nov 18, 2026.
